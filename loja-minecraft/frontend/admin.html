@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin</title><link rel="stylesheet" href="css/style.css"></head>
+<body>
+<header><h1>Painel Admin</h1><a href="loja.html">Voltar</a></header>
+<main>
+  <section class="card wide"><h2>Dashboard</h2><div id="dashboard"></div></section>
+  <section class="card wide"><h2>Novo Kit</h2><input id="name" placeholder="Nome"><input id="price" type="number" placeholder="Preço"><input id="category" placeholder="Categoria"><input id="image" placeholder="URL da imagem"><textarea id="description" placeholder="Descrição"></textarea><button onclick="createProduct()">Adicionar</button></section>
+  <section class="card wide"><h2>Novo Cupom</h2><input id="couponCode" placeholder="Código"><input id="couponDiscount" type="number" placeholder="Desconto %"><button onclick="createCoupon()">Criar Cupom</button></section>
+</main>
+<script src="js/api.js"></script><script src="js/admin.js"></script>
+</body>
+</html>
