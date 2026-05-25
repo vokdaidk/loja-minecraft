@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carioca Craft Store</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">CC</div>
+      <div>
+        <h1 id="navStoreName">Carioca Craft Store</h1>
+        <span>Loja oficial do servidor</span>
+      </div>
+    </div>
+
+    <nav>
+      <button onclick="showPage('home')">Início</button>
+      <button onclick="showPage('store')">Loja</button>
+      <button onclick="showPage('top')">Top Compradores</button>
+      <button id="adminNav" onclick="showPage('admin')" class="hidden">Admin</button>
+      <button id="logoutBtn" onclick="logout()" class="hidden danger">Sair</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="authPage" class="page active">
+      <div class="auth-card">
+        <h2>Entrar na loja</h2>
+        <p>Faça login ou crie sua conta para comprar kits.</p>
+
+        <div class="auth-tabs">
+          <button class="active" onclick="toggleAuth('login', this)">Login</button>
+          <button onclick="toggleAuth('register', this)">Criar conta</button>
+        </div>
+
+        <div id="loginBox">
+          <input id="loginEmail" type="email" placeholder="Email" />
+          <input id="loginPassword" type="password" placeholder="Senha" />
+          <button class="primary" onclick="login()">Entrar</button>
+        </div>
+
+        <div id="registerBox" class="hidden">
+          <input id="regEmail" type="email" placeholder="Email" />
+          <input id="regMine" type="text" placeholder="Nick do Minecraft" />
+          <input id="regDiscord" type="text" placeholder="Nick do Discord" />
+          <input id="regPassword" type="password" placeholder="Senha" />
+          <button class="primary" onclick="register()">Criar conta</button>
+        </div>
+
+        <div class="tip">
+          Admin teste: <b>admin@cariocacraft.com</b> / <b>admin123</b>
+        </div>
+      </div>
+    </section>
+
+    <section id="homePage" class="page">
+      <div class="hero">
+        <div class="server-logo">CC</div>
+        <h2 id="storeTitle">Carioca Craft</h2>
+        <p id="storeSubtitle">Servidor Minecraft Bedrock</p>
+        <div class="pill">🔥 Sobrevivência • Comunidade • Aventuras</div>
+
+        <div class="info-grid">
+          <div><span>Nome</span><b id="infoName">Carioca Craft</b></div>
+          <div><span>Versão</span><b>Bedrock</b></div>
+          <div><span>IP</span><b id="infoIp">mp.mundi.bed.net.br</b></div>
+          <div><span>Porta</span><b id="infoPort">25515</b></div>
+        </div>
+
+        <p class="server-line">Entre usando o IP <b id="textIp">mp.mundi.bed.net.br</b> e a porta <b id="textPort">25515</b>.</p>
+
+        <div class="socials">
+          <a id="discordLink" href="#" target="_blank">Discord</a>
+          <a id="tiktokLink" href="#" target="_blank">TikTok</a>
+          <a id="youtubeLink" href="#" target="_blank">YouTube</a>
+        </div>
+
+        <button class="primary big" onclick="showPage('store')">Ver Loja</button>
+      </div>
+    </section>
+
+    <section id="storePage" class="page">
+      <div class="section-head">
+        <h2>Loja de Kits</h2>
+        <p>Escolha uma categoria e finalize sua compra.</p>
+      </div>
+
+      <div class="filters">
+        <select id="categoryFilter" onchange="renderProducts()"></select>
+        <input id="couponInput" placeholder="Cupom de desconto" />
+      </div>
+
+      <div id="productsGrid" class="products-grid"></div>
+
+      <h2>Combos</h2>
+      <div id="combosGrid" class="products-grid"></div>
+    </section>
+
+    <section id="topPage" class="page">
+      <div class="section-head">
+        <h2>Top Compradores</h2>
+        <p>Ranking dos jogadores que mais apoiaram o servidor.</p>
+      </div>
+      <div id="topBuyers" class="ranking"></div>
+    </section>
+
+    <section id="adminPage" class="page">
+      <div class="admin-layout">
+        <aside class="admin-menu">
+          <button onclick="showAdminTab('dashboard')">Rendimento</button>
+          <button onclick="showAdminTab('products')">Kits</button>
+          <button onclick="showAdminTab('categories')">Categorias</button>
+          <button onclick="showAdminTab('coupons')">Cupons</button>
+          <button onclick="showAdminTab('combos')">Combos</button>
+          <button onclick="showAdminTab('settings')">Configurações</button>
+        </aside>
+
+        <div class="admin-content">
+          <div id="adminDashboard" class="admin-tab active">
+            <h2>Rendimento total</h2>
+            <div class="stats">
+              <div><span>Total vendido</span><b id="totalRevenue">R$ 0,00</b></div>
+              <div><span>Pedidos</span><b id="totalOrders">0</b></div>
+              <div><span>Kits cadastrados</span><b id="totalProducts">0</b></div>
+            </div>
+            <h3>Últimas vendas</h3>
+            <div id="ordersList"></div>
+          </div>
+
+          <div id="adminProducts" class="admin-tab">
+            <h2>Adicionar Kit</h2>
+            <div class="form-grid">
+              <input id="pName" placeholder="Nome do kit" />
+              <input id="pPrice" type="number" placeholder="Preço" />
+              <input id="pImage" placeholder="URL da imagem" />
+              <select id="pCategory"></select>
+              <textarea id="pDescription" placeholder="Descrição"></textarea>
+              <button class="primary" onclick="addProduct()">Salvar kit</button>
+            </div>
+            <div id="adminProductsList"></div>
+          </div>
+
+          <div id="adminCategories" class="admin-tab">
+            <h2>Categorias</h2>
+            <input id="catName" placeholder="Nome da categoria" />
+            <button class="primary" onclick="addCategory()">Adicionar categoria</button>
+            <div id="categoriesList"></div>
+          </div>
+
+          <div id="adminCoupons" class="admin-tab">
+            <h2>Cupons</h2>
+            <input id="cCode" placeholder="Código do cupom" />
+            <input id="cDiscount" type="number" placeholder="Desconto em %" />
+            <button class="primary" onclick="addCoupon()">Adicionar cupom</button>
+            <div id="couponsList"></div>
+          </div>
+
+          <div id="adminCombos" class="admin-tab">
+            <h2>Combos</h2>
+            <input id="comboName" placeholder="Nome do combo" />
+            <input id="comboPrice" type="number" placeholder="Preço do combo" />
+            <input id="comboImage" placeholder="URL da imagem" />
+            <textarea id="comboDescription" placeholder="Descrição do combo"></textarea>
+            <button class="primary" onclick="addCombo()">Adicionar combo</button>
+            <div id="combosList"></div>
+          </div>
+
+          <div id="adminSettings" class="admin-tab">
+            <h2>Configurações da loja</h2>
+            <input id="sName" placeholder="Nome da loja" />
+            <input id="sServerName" placeholder="Nome do servidor" />
+            <input id="sIp" placeholder="IP do servidor" />
+            <input id="sPort" placeholder="Porta" />
+            <input id="sDiscord" placeholder="Link Discord" />
+            <input id="sTikTok" placeholder="Link TikTok" />
+            <input id="sYouTube" placeholder="Link YouTube" />
+            <input id="sMpToken" placeholder="Token Mercado Pago" />
+            <label class="check"><input id="sMaintenance" type="checkbox" /> Loja em manutenção</label>
+            <button class="primary" onclick="saveSettings()">Salvar configurações</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
